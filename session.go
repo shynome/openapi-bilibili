@@ -12,6 +12,8 @@ type Session struct {
 	SessionConnect
 	Client *Client
 	info   *SessionInfo
+
+	timerStop context.CancelFunc
 }
 
 type SessionConnect struct {
@@ -58,6 +60,9 @@ type SessionClose struct {
 }
 
 func (s *Session) Close() (err error) {
+	if s.timerStop != nil {
+		s.timerStop()
+	}
 	end := ApiCall[SessionClose, json.RawMessage](s.Client, "/v2/app/end")
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
@@ -69,6 +74,28 @@ func (s *Session) Close() (err error) {
 	return err
 }
 
-func (sess *Session) Keepalive(ctx context.Context) error {
-	panic("todo")
+type SessionKeepAlive struct {
+	GameId string `json:"game_id"`
+}
+
+func (s *Session) Keepalive(ctx context.Context) error {
+	if s.timerStop != nil {
+		s.timerStop()
+	}
+	ctx, s.timerStop = context.WithCancel(ctx)
+	keep := ApiCall[SessionKeepAlive, json.RawMessage](s.Client, "/v2/app/heartbeat")
+	timer := time.NewTicker(20 * time.Second)
+	defer timer.Stop()
+	gameId := s.info.GameInfo.GameId
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-timer.C:
+			_, err := keep(ctx, SessionKeepAlive{GameId: gameId})
+			if err != nil {
+				return err
+			}
+		}
+	}
 }
