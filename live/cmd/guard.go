@@ -16,7 +16,7 @@ type GuardInfo struct {
 type GuardLevel int64
 
 const (
-	Lv1Guard GuardLevel = 1 + iota // 1: 总督
-	Lv2Guard                       // 2: 提督
-	Lv3Guard                       // 3: 舰长
+	GuardLv1 GuardLevel = 1 + iota // 1: 总督
+	GuardLv2                       // 2: 提督
+	GuardLv3                       // 3: 舰长
 )

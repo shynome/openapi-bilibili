@@ -1,19 +1,19 @@
 package cmd
 
-type CMD string
+type CmdType string
 
 const (
-	DanmuCMD        = "LIVE_OPEN_PLATFORM_DM"             // 获取弹幕信息
-	GiftCMD         = "LIVE_OPEN_PLATFORM_SEND_GIFT"      // 获取礼物信息
-	SuperChatCMD    = "LIVE_OPEN_PLATFORM_SUPER_CHAT"     // 获取付费留言
-	DelSuperChatCMD = "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL" // 付费留言下线
-	GuardCMD        = "LIVE_OPEN_PLATFORM_GUARD"          // 付费大航海
-	LikeCMD         = "LIVE_OPEN_PLATFORM_LIKE"           // 点赞信息
+	CmdDanmu        = "LIVE_OPEN_PLATFORM_DM"             // 获取弹幕信息
+	CmdGift         = "LIVE_OPEN_PLATFORM_SEND_GIFT"      // 获取礼物信息
+	CmdSuperChat    = "LIVE_OPEN_PLATFORM_SUPER_CHAT"     // 获取付费留言
+	CmdDelSuperChat = "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL" // 付费留言下线
+	CmdGuard        = "LIVE_OPEN_PLATFORM_GUARD"          // 付费大航海
+	CmdLike         = "LIVE_OPEN_PLATFORM_LIKE"           // 点赞信息
 )
 
 type Cmd[T any] struct {
-	CMD  CMD `json:"cmd"`
-	Data T   `json:"data"`
+	Cmd  CmdType `json:"cmd"`
+	Data T       `json:"data"`
 }
 
 type MsgBase struct {

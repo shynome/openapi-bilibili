@@ -11,6 +11,6 @@ type Danmu struct {
 type DanmuType int64
 
 const (
-	NormalDanmu DanmuType = 0 // 0: 普通弹幕
-	EmojiDanmu  DanmuType = 1 // 1：表情包弹幕
+	DanmuNormal DanmuType = 0 // 0: 普通弹幕
+	DanmuEmoji  DanmuType = 1 // 1：表情包弹幕
 )
