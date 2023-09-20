@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -24,14 +25,21 @@ func ApiCall[P any, T any](c *Client, api string) func(ctx context.Context, payl
 			)
 		})
 		body := try.To1(json.Marshal(payload))
-		api = try.To1(url.JoinPath("https://live-open.biliapi.com", api))
-		req := try.To1(http.NewRequest(http.MethodPost, api, bytes.NewReader(body)))
+		link := try.To1(url.JoinPath("https://live-open.biliapi.com", api))
+		req := try.To1(http.NewRequest(http.MethodPost, link, bytes.NewReader(body)))
 		req = req.WithContext(ctx)
 		req = try.To1(c.NewApiRequest(req))
 		resp := try.To1(c.Client.Do(req))
 		defer resp.Body.Close()
+		rbody := try.To1(io.ReadAll(resp.Body))
+		if code := resp.StatusCode; code != 200 {
+			err = fmt.Errorf(
+				"status code expect 200, but got %d. body: %s",
+				code, string(rbody))
+			return
+		}
 		var result Response[json.RawMessage]
-		try.To(json.NewDecoder(resp.Body).Decode(&result))
+		try.To(json.Unmarshal(rbody, &result))
 		if result.Code != 0 {
 			err = errors.Join(ErrBilibiliApiError, &result)
 			return
