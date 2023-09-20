@@ -1,4 +1,4 @@
-module remoon.cn/openapi-bilibili
+module github.com/shynome/openapi-bilibili
 
 go 1.21.1
 
