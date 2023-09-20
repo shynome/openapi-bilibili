@@ -41,6 +41,7 @@ func Connect(ctx context.Context, authBody string, servers []string) (_ <-chan M
 					Cmd:  "error",
 					Data: json.RawMessage(err.Error()),
 				}
+				cause(err)
 				return
 			}
 			go func() {
