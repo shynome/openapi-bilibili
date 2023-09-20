@@ -10,19 +10,19 @@ import (
 	"github.com/shynome/openapi-bilibili/internal/testutil"
 )
 
-func TestSession(t *testing.T) {
+func TestApp(t *testing.T) {
 	conf := testutil.Conf
 
 	ctx := context.Background()
 	client := NewClient(conf.Key, conf.Secret)
-	session := try.To1(client.Connect(ctx, conf.AppID, conf.IDCode))
+	app := try.To1(client.Open(ctx, conf.AppID, conf.IDCode))
 	ctx2, cause := context.WithCancelCause(ctx)
 	go func() {
-		err := session.Keepalive(ctx)
+		err := app.KeepAlive(ctx)
 		cause(err)
 	}()
 	defer func() {
-		try.To(session.Close())
+		try.To(app.Close())
 	}()
 	defer func() {
 		<-ctx2.Done()

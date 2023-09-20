@@ -1,4 +1,4 @@
-package live
+package live_test
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	"github.com/shynome/err0/try"
 	bilibili "github.com/shynome/openapi-bilibili"
 	"github.com/shynome/openapi-bilibili/internal/testutil"
+	"github.com/shynome/openapi-bilibili/live"
 )
 
 func TestConnect(t *testing.T) {
@@ -22,13 +23,13 @@ func TestConnect(t *testing.T) {
 
 	c := bilibili.NewClient(conf.Key, conf.Secret)
 
-	s := try.To1(c.Connect(ctx, conf.AppID, conf.IDCode))
-	try.To(s.Close())
+	app := try.To1(c.Open(ctx, conf.AppID, conf.IDCode))
+	try.To(app.Close())
 	// defer s.Close()
 	// go s.Keepalive(ctx)
 
-	info := s.Info().WebsocketInfo
-	ch := try.To1(Connect(ctx, info.AuthBody, info.WssLink))
+	room := live.RoomWith(app.Info().WebsocketInfo)
+	ch := try.To1(room.Connect(ctx))
 	for msg := range ch {
 		log.Println("data", msg.Cmd, string(msg.Data))
 	}

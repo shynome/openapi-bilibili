@@ -4,30 +4,67 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/shynome/err0"
 	"github.com/shynome/err0/try"
+	bilibili "github.com/shynome/openapi-bilibili"
 	"nhooyr.io/websocket"
 )
 
-type Live struct{}
+type Room struct {
+	info bilibili.WebsocketInfo
+}
 
-func Connect(ctx context.Context, authBody string, servers []string) (_ <-chan Msg, err error) {
+func RoomWith(info bilibili.WebsocketInfo) *Room {
+	return &Room{
+		info: info,
+	}
+}
+
+func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	defer err0.Then(&err, nil, nil)
 
 	ctx, cause := context.WithCancelCause(ctx)
 
-	conn, _ := try.To2(websocket.Dial(ctx, servers[0], nil))
+	info := room.info
+	var conn *websocket.Conn
+	{
+		errs := []error{}
+		for _, link := range info.WssLink {
+			c, _, err := websocket.Dial(ctx, link, nil)
+			if err == nil {
+				conn = c
+				break
+			}
+			errs = append(errs, err)
+		}
+		if conn == nil {
+			return nil, errors.Join(errs...)
+		}
+	}
 
 	{
 		auth := new(bytes.Buffer)
-		hdr := NewPacketHeader(OpAuth, MsgV0, uint32(len(authBody)+16))
+		hdr := NewPacketHeader(OpAuth, MsgV0, uint32(len(info.AuthBody)+16))
 		auth.Write(hdr[:])
-		auth.WriteString(authBody)
+		auth.WriteString(info.AuthBody)
 
 		try.To(conn.Write(ctx, websocket.MessageBinary, auth.Bytes()))
+		_, data := try.To2(conn.Read(ctx))
+		ch := make(chan Msg, 1)
+		try.To(Unpack(ch, data))
+		msg := <-ch
+		var status struct {
+			Code int64 `json:"code"`
+		}
+		try.To(json.Unmarshal(msg.Data, &status))
+		if status.Code != 0 {
+			return nil, fmt.Errorf("auth fail. code %d", status.Code)
+		}
 	}
 
 	ch := make(chan Msg, 1024)
