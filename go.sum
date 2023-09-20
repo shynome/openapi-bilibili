@@ -1,0 +1,4 @@
+github.com/google/uuid v1.3.1 h1:KjJaJ9iWZ3jOFZIf1Lqf4laDRCasjl0BCmnEGxkdLb4=
+github.com/google/uuid v1.3.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/shynome/err0 v0.1.0 h1:+cWnUkE2kZ9fFTTOrgSkoPzBuSppywI9gd0EFQrFaDw=
+github.com/shynome/err0 v0.1.0/go.mod h1:n5YVOAf8QSa8LMWWFKCXoHQjAjwjywKFiORV/btN3Aw=
