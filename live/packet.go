@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/zlib"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 
@@ -21,6 +22,11 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 	}
 	h := PacketHeader(data[0:16])
 	end := h.End()
+	if realEnd := len(data); end > uint32(realEnd) {
+		return fmt.Errorf(
+			"%w. header length is %d, but the data length is %d", ErrMsgPackedWrong,
+			end, realEnd)
+	}
 	body := data[16:end]
 	switch op := h.Operation(); op {
 	case OpAuthReply:
@@ -51,3 +57,5 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 		return fmt.Errorf("unsupported msg version %v", v)
 	}
 }
+
+var ErrMsgPackedWrong = errors.New("msg packed wrong")
