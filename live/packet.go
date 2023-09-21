@@ -28,33 +28,29 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 			end, realEnd)
 	}
 	body := data[16:end]
-	switch op := h.Operation(); op {
-	case OpAuthReply:
-		ch <- Msg{Cmd: "auth_reply", Data: body}
-		return Unpack(ch, data[end:])
-	case OpHeartbeatReply:
-		ch <- Msg{Cmd: "heartbeat_reply", Data: body}
-		return Unpack(ch, data[end:])
-	default:
-		ch <- Msg{Cmd: "unknown", Data: body}
-		return Unpack(ch, data[end:])
-	case OpSmsSendReply:
-		// continue
-	}
 	switch v := h.Version(); v {
-	case MsgV0:
-		var msg Msg
-		try.To(json.Unmarshal(body, &msg))
-		ch <- msg
-		return Unpack(ch, data[end:])
+	default:
+		return fmt.Errorf("unsupported msg version %v", v)
 	case MsgV2:
 		r := bytes.NewReader(body)
 		zr := try.To1(zlib.NewReader(r))
 		defer zr.Close()
 		data = try.To1(io.ReadAll(zr))
 		return Unpack(ch, data)
-	default:
-		return fmt.Errorf("unsupported msg version %v", v)
+	case MsgV0:
+		switch op := h.Operation(); op {
+		case OpAuthReply:
+			ch <- Msg{Cmd: "auth_reply", Data: body}
+		case OpHeartbeatReply:
+			ch <- Msg{Cmd: "heartbeat_reply", Data: body}
+		default:
+			ch <- Msg{Cmd: "unknown", Data: body}
+		case OpSmsSendReply:
+			var msg Msg
+			try.To(json.Unmarshal(body, &msg))
+			ch <- msg
+		}
+		return Unpack(ch, data[end:])
 	}
 }
 
