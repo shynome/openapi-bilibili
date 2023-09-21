@@ -94,6 +94,21 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	}()
 
 	go func() {
+		timer := time.NewTicker(5 * time.Second)
+		defer timer.Stop()
+		for range timer.C {
+			func() {
+				ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+				defer cancel()
+				if err := conn.Ping(ctx); err != nil {
+					cause(err)
+					return
+				}
+			}()
+		}
+	}()
+
+	go func() {
 		defer cause(nil)
 
 		hdr := NewPacketHeader(OpHeartbeat, MsgV0, 16)
