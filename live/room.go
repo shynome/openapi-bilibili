@@ -64,7 +64,7 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 		}
 		try.To(json.Unmarshal(msg.Data, &status))
 		if status.Code != 0 {
-			return nil, fmt.Errorf("auth fail. code %d", status.Code)
+			return nil, fmt.Errorf("%w. code %d", ErrAuthFailed, status.Code)
 		}
 	}
 
@@ -113,3 +113,5 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 
 	return ch, nil
 }
+
+var ErrAuthFailed = errors.New("auth failed")
