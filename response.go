@@ -25,7 +25,7 @@ func ApiCall[P any, T any](c *Client, api string) func(ctx context.Context, payl
 			)
 		})
 		body := try.To1(json.Marshal(payload))
-		link := try.To1(url.JoinPath("https://live-open.biliapi.com", api))
+		link := try.To1(url.JoinPath(c.Endpoint, api))
 		req := try.To1(http.NewRequest(http.MethodPost, link, bytes.NewReader(body)))
 		req = req.WithContext(ctx)
 		req = try.To1(c.NewApiRequest(req))
