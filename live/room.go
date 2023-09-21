@@ -96,15 +96,16 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	go func() {
 		timer := time.NewTicker(5 * time.Second)
 		defer timer.Stop()
+		ping := func(ctx context.Context) error {
+			ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+			defer cancel()
+			return conn.Ping(ctx)
+		}
 		for range timer.C {
-			func() {
-				ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-				defer cancel()
-				if err := conn.Ping(ctx); err != nil {
-					cause(err)
-					return
-				}
-			}()
+			if err := ping(ctx); err != nil {
+				cause(err)
+				return
+			}
 		}
 	}()
 
