@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.0.5] - 2023-09-21
+
+### Fix
+
+- 添加 Ping-Pong 检查 WebSocket 存活状态
+
 ## [0.0.4] - 2023-09-21
 
 ### Improve
