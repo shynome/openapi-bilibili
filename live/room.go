@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/shynome/err0"
@@ -85,7 +84,10 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 			}
 			go func() {
 				if err := Unpack(ch, msg); err != nil {
-					log.Println("unpack error", err)
+					ch <- Msg{
+						Cmd:  "unpack error",
+						Data: json.RawMessage(err.Error()),
+					}
 				}
 			}()
 		}
