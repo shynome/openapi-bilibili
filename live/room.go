@@ -52,10 +52,11 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 		auth.Write(hdr[:])
 		auth.WriteString(info.AuthBody)
 
-		try.To(conn.Write(ctx, websocket.MessageBinary, auth.Bytes()))
-		rctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 		defer cancel()
-		_, data := try.To2(conn.Read(rctx))
+
+		try.To(conn.Write(ctx, websocket.MessageBinary, auth.Bytes()))
+		_, data := try.To2(conn.Read(ctx))
 		ch := make(chan Msg, 1)
 		try.To(Unpack(ch, data))
 		msg := <-ch
