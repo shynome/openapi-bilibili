@@ -14,7 +14,7 @@ type Gift struct {
 type GiftInfo struct {
 	ID   int64  `json:"gift_id"`   // 道具id(盲盒:爆出道具id)
 	Name string `json:"gift_name"` // 道具名(盲盒:爆出道具名)
-	Num  string `json:"gift_num"`  // 赠送道具数量
+	Num  int64  `json:"gift_num"`  // 赠送道具数量
 	Icon string `json:"gift_icon"` // 道具icon
 }
 
