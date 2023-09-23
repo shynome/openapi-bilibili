@@ -1,5 +1,10 @@
 package cmd
 
+import (
+	"fmt"
+	"strconv"
+)
+
 type Guard struct {
 	MsgBase
 	UserInfo AnchorInfo `json:"user_info"` // 用户信息
@@ -20,3 +25,19 @@ const (
 	GuardLv2                       // 2: 提督
 	GuardLv3                       // 3: 舰长
 )
+
+var _ fmt.Stringer = (*GuardLevel)(nil)
+
+func (lv GuardLevel) String() string {
+	switch lv {
+	default:
+		lv := strconv.FormatInt(int64(lv), 10)
+		return fmt.Sprintf("未知级别: %s", lv)
+	case GuardLv1:
+		return "总督"
+	case GuardLv2:
+		return "提督"
+	case GuardLv3:
+		return "舰长"
+	}
+}
