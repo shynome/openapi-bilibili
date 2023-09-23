@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.0.9] - 2023-09-21
+## [0.0.10] - 2023-09-23
+
+### Improve
+
+- 为 `GuardLevel` 实现 `fmt.Stringer`
 
 ### Fix
 
