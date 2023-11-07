@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/shynome/err0"
 	"github.com/shynome/err0/try"
 )
 
@@ -37,7 +38,8 @@ type WebsocketInfo struct {
 	WssLink []string `json:"wss_link"`
 }
 
-func (c *Client) Open(ctx context.Context, appid int64, code string) (*App, error) {
+func (c *Client) Open(ctx context.Context, appid int64, code string) (_ *App, err error) {
+	defer err0.Then(&err, nil, nil)
 	s := &App{
 		Client: c,
 		AppOpen: AppOpen{
