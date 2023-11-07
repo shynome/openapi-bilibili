@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.11] - 2023-11-07
+
+- fix: handle try.To err
+
 ## [0.0.10] - 2023-09-23
 
 ### Improve
