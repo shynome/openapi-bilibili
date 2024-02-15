@@ -103,3 +103,21 @@ func (s *App) KeepAlive(ctx context.Context) error {
 		}
 	}
 }
+
+type BatchKeepAlive struct {
+	// 场次id
+	GameIDs []string `json:"game_ids"`
+}
+
+type BatchKeepAliveInfo struct {
+	// 心跳失败的id
+	FailedGameIDs []string `json:"failed_game_ids"`
+}
+
+func (c *Client) BatchKeepAlive(ctx context.Context, ids []string) (_ BatchKeepAliveInfo, err error) {
+	keep := ApiCall[BatchKeepAlive, BatchKeepAliveInfo](c, "/v2/app/batchHeartbeat")
+	payload := BatchKeepAlive{
+		GameIDs: ids,
+	}
+	return keep(ctx, payload)
+}

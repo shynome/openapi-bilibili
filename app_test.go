@@ -34,6 +34,12 @@ func TestApp(t *testing.T) {
 			t.Error(err)
 		}
 	}()
+	{ // 测试 batch keep alive
+		info := try.To1(client.BatchKeepAlive(ctx, []string{app.Info().GameInfo.GameId}))
+		if len(info.FailedGameIDs) != 0 {
+			t.Error("批量心跳失败")
+		}
+	}
 	for {
 		select {
 		case <-time.After(2 * time.Minute):
