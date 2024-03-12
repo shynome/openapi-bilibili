@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0] - 2024-03-12
+
+- follow bilibili change, replace `uid` with `open_id`
+
 ## [0.2.0] - 2024-02-15
 
 - 添加批量心跳接口
