@@ -2,7 +2,7 @@ package cmd
 
 type UserInfo struct {
 	Username   string `json:"uname"`       // 用户昵称
-	UID        int64  `json:"uid"`         // 用户UID
+	OpenID     string `json:"open_id"`     // 用户open_id
 	Uface      string `json:"uface"`       // 用户头像
 	GuardLevel int64  `json:"guard_level"` // 对应房间大航海等级
 	FansMedal
