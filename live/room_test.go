@@ -24,9 +24,8 @@ func TestConnect(t *testing.T) {
 	c := bilibili.NewClient(conf.Key, conf.Secret)
 
 	app := try.To1(c.Open(ctx, conf.AppID, conf.IDCode))
-	try.To(app.Close())
-	// defer s.Close()
-	// go s.Keepalive(ctx)
+	defer app.Close()
+	go app.KeepAlive(ctx)
 
 	room := live.RoomWith(app.Info().WebsocketInfo)
 	ch := try.To1(room.Connect(ctx))
