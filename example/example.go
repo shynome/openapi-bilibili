@@ -14,7 +14,8 @@ func main() {
 	bclient := bilibili.NewClient("access_key_id", "access_key_secret")
 	ctx := context.Background()
 	app := try.To1(bclient.Open(ctx, 0000000000000, "主播身份码"))
-	try.To(app.Close()) // 拿到认证信息就可以关闭了
+	defer app.Close()
+	go app.KeepAlive(ctx)
 	info := app.Info().WebsocketInfo
 	room := live.RoomWith(info)
 	ctx, closeMsgCh := context.WithCancel(ctx)
