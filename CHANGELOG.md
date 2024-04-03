@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1] - 2024-04-03
+
+- 把 UID 字段加回来了
+
 ## [0.3.0] - 2024-03-12
 
 - follow bilibili change, replace `uid` with `open_id`
