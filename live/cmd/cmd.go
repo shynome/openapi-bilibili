@@ -1,5 +1,7 @@
 package cmd
 
+import "encoding/json"
+
 type CmdType string
 
 const (
@@ -14,6 +16,8 @@ const (
 type Cmd[T any] struct {
 	Cmd  CmdType `json:"cmd"`
 	Data T       `json:"data"`
+
+	Info json.RawMessage `json:"info"`
 }
 
 type MsgBase struct {
