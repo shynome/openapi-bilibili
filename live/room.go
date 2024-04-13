@@ -16,6 +16,8 @@ import (
 
 type Room struct {
 	info bilibili.WebsocketInfo
+
+	WSDialOptioins *websocket.DialOptions
 }
 
 func RoomWith(info bilibili.WebsocketInfo) *Room {
@@ -34,7 +36,7 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	{
 		errs := []error{}
 		for _, link := range info.WssLink {
-			c, _, err := websocket.Dial(ctx, link, nil)
+			c, _, err := websocket.Dial(ctx, link, room.WSDialOptioins)
 			if err == nil {
 				conn = c
 				break
