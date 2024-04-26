@@ -87,6 +87,10 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 			}
 			go func() {
 				if err := Unpack(ch, msg); err != nil {
+					if errors.Is(err, errChanEnd) {
+						cause(err)
+						return
+					}
 					ch <- Msg{
 						Cmd:  "unpack error",
 						Data: json.RawMessage(err.Error()),

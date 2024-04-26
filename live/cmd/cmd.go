@@ -5,12 +5,13 @@ import "encoding/json"
 type CmdType string
 
 const (
-	CmdDanmu        CmdType = "LIVE_OPEN_PLATFORM_DM"             // 获取弹幕信息
-	CmdGift         CmdType = "LIVE_OPEN_PLATFORM_SEND_GIFT"      // 获取礼物信息
-	CmdSuperChat    CmdType = "LIVE_OPEN_PLATFORM_SUPER_CHAT"     // 获取付费留言
-	CmdDelSuperChat CmdType = "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL" // 付费留言下线
-	CmdGuard        CmdType = "LIVE_OPEN_PLATFORM_GUARD"          // 付费大航海
-	CmdLike         CmdType = "LIVE_OPEN_PLATFORM_LIKE"           // 点赞信息
+	CmdDanmu        CmdType = "LIVE_OPEN_PLATFORM_DM"              // 获取弹幕信息
+	CmdGift         CmdType = "LIVE_OPEN_PLATFORM_SEND_GIFT"       // 获取礼物信息
+	CmdSuperChat    CmdType = "LIVE_OPEN_PLATFORM_SUPER_CHAT"      // 获取付费留言
+	CmdDelSuperChat CmdType = "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL"  // 付费留言下线
+	CmdGuard        CmdType = "LIVE_OPEN_PLATFORM_GUARD"           // 付费大航海
+	CmdLike         CmdType = "LIVE_OPEN_PLATFORM_LIKE"            // 点赞信息
+	CmdEnd          CmdType = "LIVE_OPEN_PLATFORM_INTERACTION_END" // 消息推送结束通知
 )
 
 type Cmd[T any] struct {

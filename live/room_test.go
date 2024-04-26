@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/shynome/err0/try"
 	bilibili "github.com/shynome/openapi-bilibili"
@@ -24,7 +25,9 @@ func TestConnect(t *testing.T) {
 	c := bilibili.NewClient(conf.Key, conf.Secret)
 
 	app := try.To1(c.Open(ctx, conf.AppID, conf.IDCode))
-	defer app.Close()
+	time.AfterFunc(2*time.Minute, func() {
+		app.Close()
+	})
 	go app.KeepAlive(ctx)
 
 	room := live.RoomWith(app.Info().WebsocketInfo)
@@ -32,4 +35,5 @@ func TestConnect(t *testing.T) {
 	for msg := range ch {
 		log.Println("data", msg.Cmd, string(msg.Data))
 	}
+	t.Log("closed")
 }

@@ -49,9 +49,13 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 			var msg Msg
 			try.To(json.Unmarshal(body, &msg))
 			ch <- msg
+			if msg.Cmd == cmd.CmdEnd {
+				return errChanEnd
+			}
 		}
 		return Unpack(ch, data[end:])
 	}
 }
 
 var ErrMsgPackedWrong = errors.New("msg packed wrong")
+var errChanEnd = errors.New("消息推送结束")
