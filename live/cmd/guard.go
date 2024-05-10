@@ -16,6 +16,7 @@ type GuardInfo struct {
 	Level GuardLevel `json:"guard_level"` // 大航海等级
 	Num   int64      `json:"guard_num"`   // 大航海数量
 	Unit  string     `json:"guard_unit"`  // 大航海单位
+	Price int64      `json:"price"`       // 大航海金瓜子
 }
 
 type GuardLevel int64
