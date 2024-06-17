@@ -25,12 +25,13 @@ func TestConnect(t *testing.T) {
 	c := bilibili.NewClient(conf.Key, conf.Secret)
 
 	app := try.To1(c.Open(ctx, conf.AppID, conf.IDCode))
-	time.AfterFunc(2*time.Minute, func() {
+	time.AfterFunc(4*time.Minute, func() {
 		app.Close()
 	})
 	go app.KeepAlive(ctx)
 
-	room := live.RoomWith(app.Info().WebsocketInfo)
+	info := app.Info()
+	room := live.RoomWith(info.WebsocketInfo, info.GameInfo.GameId)
 	ch := try.To1(room.Connect(ctx))
 	for msg := range ch {
 		log.Println("data", msg.Cmd, string(msg.Data))

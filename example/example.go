@@ -17,7 +17,7 @@ func main() {
 	defer app.Close()
 	go app.KeepAlive(ctx)
 	info := app.Info().WebsocketInfo
-	room := live.RoomWith(info)
+	room := live.RoomWith(info, app.Info().GameInfo.GameId)
 	ctx, closeMsgCh := context.WithCancel(ctx)
 	go func() {
 		time.Sleep(10 * time.Minute)

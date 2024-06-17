@@ -15,14 +15,16 @@ import (
 )
 
 type Room struct {
-	info bilibili.WebsocketInfo
+	info    bilibili.WebsocketInfo
+	game_id string
 
 	WSDialOptioins *websocket.DialOptions
 }
 
-func RoomWith(info bilibili.WebsocketInfo) *Room {
+func RoomWith(info bilibili.WebsocketInfo, game_id string) *Room {
 	return &Room{
-		info: info,
+		info:    info,
+		game_id: game_id,
 	}
 }
 
@@ -87,7 +89,7 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 			}
 			go func() {
 				if err := Unpack(ch, msg); err != nil {
-					if errors.Is(err, errChanEnd) {
+					if end, ok := err.(*GameEnd); ok && end.GameID == room.game_id {
 						cause(err)
 						return
 					}

@@ -50,7 +50,9 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 			try.To(json.Unmarshal(body, &msg))
 			ch <- msg
 			if msg.Cmd == cmd.CmdEnd {
-				return errChanEnd
+				var end GameEnd
+				try.To(json.Unmarshal(msg.Data, &end))
+				return &end
 			}
 		}
 		return Unpack(ch, data[end:])
@@ -58,4 +60,15 @@ func Unpack(ch chan<- Msg, data []byte) (err error) {
 }
 
 var ErrMsgPackedWrong = errors.New("msg packed wrong")
-var errChanEnd = errors.New("消息推送结束")
+
+type GameEnd struct {
+	Raw       []byte
+	GameID    string `json:"game_id"`
+	Timestamp int64  `json:"timestamp"`
+}
+
+var _ error = (*GameEnd)(nil)
+
+func (g *GameEnd) Error() string {
+	return fmt.Sprintf("消息推送结束. game_id: %s; timestamp: %d", g.GameID, g.Timestamp)
+}
