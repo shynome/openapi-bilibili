@@ -88,7 +88,7 @@ func (s *App) KeepAlive(ctx context.Context) error {
 	}
 	ctx, s.timerStop = context.WithCancel(ctx)
 	keep := ApiCall[AppKeepAlive, json.RawMessage](s.Client, "/v2/app/heartbeat")
-	timer := time.NewTicker(20 * time.Second)
+	timer := time.NewTicker(19 * time.Second)
 	defer timer.Stop()
 	gameId := s.info.GameInfo.GameId
 	for {
