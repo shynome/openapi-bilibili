@@ -123,7 +123,7 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 
 		hdr := NewPacketHeader(OpHeartbeat, MsgV0, 16)
 
-		timer := time.NewTicker(30 * time.Second)
+		timer := time.NewTicker(20 * time.Second)
 		defer timer.Stop()
 
 		for range timer.C {
