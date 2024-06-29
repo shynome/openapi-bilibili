@@ -47,11 +47,7 @@ type AnchorInfo struct {
 	Username string `json:"uname"`   // 主播昵称
 	Uface    string `json:"uface"`   // 主播头像
 	OpneID   string `json:"open_id"` // 用户唯一标识
-
-	// 主播uid
-	//
-	// Deprecated: 已废弃，固定为0
-	UID int64 `json:"uid"`
+	UID      int64  `json:"uid"`     // 主播uid
 }
 
 func (c *Client) Open(ctx context.Context, appid int64, code string) (_ *App, err error) {
