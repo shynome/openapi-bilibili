@@ -46,7 +46,7 @@ type AnchorInfo struct {
 	RoomID   int64  `json:"room_id"` // 主播房间号
 	Username string `json:"uname"`   // 主播昵称
 	Uface    string `json:"uface"`   // 主播头像
-	OpneID   string `json:"open_id"` // 用户唯一标识
+	OpenID   string `json:"open_id"` // 用户唯一标识
 	UID      int64  `json:"uid"`     // 主播uid
 }
 
