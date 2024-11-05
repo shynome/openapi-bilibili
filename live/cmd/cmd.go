@@ -12,6 +12,9 @@ const (
 	CmdGuard        CmdType = "LIVE_OPEN_PLATFORM_GUARD"           // 付费大航海
 	CmdLike         CmdType = "LIVE_OPEN_PLATFORM_LIKE"            // 点赞信息
 	CmdEnd          CmdType = "LIVE_OPEN_PLATFORM_INTERACTION_END" // 消息推送结束通知
+	CmdEnter        CmdType = "LIVE_OPEN_PLATFORM_LIVE_ROOM_ENTER" // 直播间有观众进入直播间时触发
+	CmdLiveStart    CmdType = "LIVE_OPEN_PLATFORM_LIVE_START"      // 直播间开始直播时触发
+	CmdLiveEnd      CmdType = "LIVE_OPEN_PLATFORM_LIVE_END"        // 直播间停止直播时触发
 )
 
 type Cmd[T any] struct {
