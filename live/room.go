@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/shynome/err0"
@@ -77,6 +78,8 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 
 	go func() {
 		defer close(ch)
+		var wg sync.WaitGroup
+		defer wg.Wait()
 		for {
 			_, msg, err := conn.Read(ctx)
 			if err != nil {
@@ -87,7 +90,9 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 				cause(err)
 				return
 			}
+			wg.Add(1)
 			go func() {
+				defer wg.Done()
 				if err := Unpack(ch, msg); err != nil {
 					if end, ok := err.(*GameEnd); ok && end.GameID == room.game_id {
 						cause(err)
