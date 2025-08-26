@@ -33,6 +33,9 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	defer err0.Then(&err, nil, nil)
 
 	ctx, cause := context.WithCancelCause(ctx)
+	defer err0.Then(&err, nil, func() {
+		cause(err)
+	})
 
 	info := room.info
 	var conn *websocket.Conn
