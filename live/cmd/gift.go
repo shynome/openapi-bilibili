@@ -5,10 +5,12 @@ type Gift struct {
 	UserInfo
 	GiftInfo
 	Price      int64      `json:"price"`       // 支付金额(1000 = 1元 = 10电池),盲盒:爆出道具的价值
+	RealPrice  int64      `json:"r_price"`     // 实际价值(1000 = 1元 = 10电池),盲盒:爆出道具的价值
 	Paid       bool       `json:"paid"`        // 是否是付费道具
 	AnchorInfo AnchorInfo `json:"anchor_info"` // 主播信息
 	ComboGift  bool       `json:"combo_gift"`  // 是否是combo道具
 	ComboInfo  ComboInfo  `json:"combo_info"`  // 连击信息
+	BlindGift  BlindGift  `json:"blind_gift"`  // 盲盒信息
 }
 
 type GiftInfo struct {
@@ -23,4 +25,9 @@ type ComboInfo struct {
 	Count   int64  `json:"combo_count"`    // 连击次数
 	ID      string `json:"combo_id"`       // 连击id
 	Timeout int64  `json:"combo_timeout"`  //连击有效期秒
+}
+
+type BlindGift struct {
+	ID     int64 `json:"blind_gift_id"` // 盲盒id
+	Status bool  `json:"status"`        // 是否是盲盒
 }
