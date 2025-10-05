@@ -15,7 +15,7 @@ type Guard struct {
 type GuardInfo struct {
 	Level GuardLevel `json:"guard_level"` // 大航海等级
 	Num   int64      `json:"guard_num"`   // 大航海数量
-	Unit  string     `json:"guard_unit"`  // 大航海单位
+	Unit  string     `json:"guard_unit"`  // 大航海单位(正常单位为“月”，如为其他内容，无视guard_num以本字段内容为准，例如*3天)
 	Price int64      `json:"price"`       // 大航海金瓜子
 }
 
