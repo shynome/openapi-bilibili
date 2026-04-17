@@ -111,6 +111,10 @@ func (room *Room) Connect(ctx context.Context) (_ <-chan Msg, err error) {
 	}()
 
 	go func() {
+		// 2026-04-17 12:00 我敲B站服务器升级把 ping 给去掉了, 现在不会回复pong了
+		if true {
+			return
+		}
 		timer := time.NewTicker(5 * time.Second)
 		defer timer.Stop()
 		ping := func(ctx context.Context) error {
